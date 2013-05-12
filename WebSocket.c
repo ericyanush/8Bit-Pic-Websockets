@@ -4,7 +4,7 @@
 #include "TCPIP Stack/Helpers.h"
 
 
-int CreateHandShake(TCP_SOCKET MySocket,unsigned char* WebSocketKey, short KeyLength);
+int CreateHandShake(TCP_SOCKET MySocket,unsigned char* WebSocketKey);
 int UnMaskFrame(WebSocketFrame *Frame);
 void CreateFrame(WebSocketFrame * OutFrame, BYTE* Data, int Length, int Opcode);
 
@@ -17,7 +17,7 @@ BYTE WebSocketGuid [] = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
 /*
  * Requires that TCPIsPutReady() is called first
  */
-int CreateHandShake(TCP_SOCKET MySocket,unsigned char* WebSocketKey, short KeyLength){
+int CreateHandShake(TCP_SOCKET MySocket,unsigned char* WebSocketKey){
 
     static BYTE MyDebug[30];
     int b;
@@ -26,14 +26,14 @@ int CreateHandShake(TCP_SOCKET MySocket,unsigned char* WebSocketKey, short KeyLe
     static BYTE ResultBase64[40];
     static int ResultStringLength;
     
-    for(b=0;b<KeyLength;b++){
+    for(b=0;b<WebSocketKeyLength;b++){
         MyDebug[b] = WebSocketKey[b];
     }
 
     TCPPutArray(MySocket,ServerReply,sizeof ServerReply - 1);
     
     SHA1Initialize(&ReplyHash);
-    HashAddData(&ReplyHash,(BYTE*)WebSocketKey,(WORD)KeyLength);
+    HashAddData(&ReplyHash,(BYTE*)WebSocketKey,(WORD)WebSocketKeyLength);
     HashAddData(&ReplyHash,(BYTE*)WebSocketGuid,(WORD)sizeof WebSocketGuid - 1);
     SHA1Calculate(&ReplyHash,Sha1Result);
     ResultStringLength = Base64Encode(Sha1Result,20,ResultBase64,40);

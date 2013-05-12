@@ -1,4 +1,5 @@
 //#include "GenericTypeDefs.h"
+#define WebSocketKeyLength 24
 #define MaxFrameLength 248
 #define ShortExtendLength 2
 #define LongExtendLength 4
@@ -18,7 +19,7 @@ typedef enum {
     ContinuationFrame, TextFrame, BinaryFrame, ConnectionClose = 0x08, WSPing, WSPong
 } OPCODES;
 
-extern int CreateHandShake(TCP_SOCKET MySocket,unsigned char* WebSocketKey, short KeyLength);
+extern int CreateHandShake(TCP_SOCKET MySocket,unsigned char* WebSocketKey);
 extern int UnMaskFrame(WebSocketFrame *Frame);
 extern void CreateFrame(WebSocketFrame *OutFrame, BYTE* Data, int Length, int Opcode);
 extern int WebSocketEventRequest[MAX_HTTP_CONNECTIONS];//for requesting an data out event

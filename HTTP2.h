@@ -201,7 +201,7 @@
 	    HTTP_FILE_TYPE fileType;			// File type to return with Content-Type
 		BYTE data[HTTP_MAX_DATA_LEN];		// General purpose data buffer
                 #if defined STACK_USE_WEBSOCKETS
-                BYTE Key[24];
+                BYTE Key[WebSocketKeyLength];
                 BYTE smWebSocket;
                 WORD DataLength;
                 #endif

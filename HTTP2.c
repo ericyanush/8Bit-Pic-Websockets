@@ -740,7 +740,7 @@ static void HTTPProcess(void) {
                 if (PutLength < MaxFrameLength + 2)//wait for enough room for reply
                     break;
 
-                CreateHandShake(sktHTTP,curHTTP.Key,24);
+                CreateHandShake(sktHTTP,curHTTP.Key);
                 smHTTP = SM_HTTP_PROC_WEBSOCKET;
                 break;
             case SM_HTTP_PROC_WEBSOCKET:
@@ -1395,11 +1395,11 @@ static void HTTPHeaderParseWebsocketKey(void)
         int a = 0;
 
 	WORD len;
-	BYTE buf[24];
+	BYTE buf[WebSocketKeyLength];
 
-	// Read up to the CRLF (max 9 bytes or ~1GB)
+	// Read up to the CRLF (should be 24 bytes)
 	len = TCPFindROMArray(sktHTTP, HTTP_CRLF, HTTP_CRLF_LEN, 0, FALSE);
-	if(len != sizeof(buf))
+	if(len != WebSocketKeyLength)
 	{
 		curHTTP.httpStatus = HTTP_BAD_REQUEST;
 		curHTTP.byteCount = 0;
